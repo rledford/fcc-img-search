@@ -13,6 +13,6 @@
     "ejs": "latest",
     "express": "latest",
     "google-search": "latest",
-    "mongod": "~1.4.38"
+    "mongodb": "latest"
   }
 }
