@@ -1,14 +1,13 @@
 var google = require('google-search');
-var mongoConfig = require(process.cwd()+'/config/mongodb');
 
 exports.getSearchHistory = function(req, res){
    console.log('getting search history');
    var mongoClient = require('mongodb').MongoClient;
-   mongoClient.connect(mongoConfig.mlabGuest, function(err, db){
+   mongoClient.connect(process.env.MONGO_URI, function(err, db){
       if (err){
          res.send(err);
       } else {
-         db.collection(mongoConfig.historyCollection, function(err, col){
+         db.collection(process.env.HISTORY, function(err, col){
             if (err){
                res.send(err);
                db.close();
@@ -32,11 +31,11 @@ exports.getSearchTerm = function(req, res, next, term){
 exports.updateSearchHistory = function(req, res, next){
    console.log('updating search history');
    var mongoClient = require('mongodb').MongoClient;
-   mongoClient.connect(mongoConfig.mlabAdmin, function(err, db){
+   mongoClient.connect(process.env.MONGO_URI, function(err, db){
       if (err){
          console.log('unable to connect to database');
       } else {
-         db.collection(mongoConfig.historyCollection, function(err, col){
+         db.collection(process.env.HISTORY, function(err, col){
             if (err){
                console.log(err);
                db.close();
@@ -57,7 +56,7 @@ exports.updateSearchHistory = function(req, res, next){
 };
 
 exports.search = function(req, res, next){
-   var gsearch = new google({key: 'AIzaSyC856wLAVTWiJxcRIlaFG9Cps63Yl8PH7o', cx: '014136419315170420662:vdfddiykv3s'});
+   var gsearch = new google({key: process.env.GOOGLE_KEY , cx: process.env.GOOGLE_CX});
    gsearch.build({
       q: req.searchterm,
       start: (req.query.offset && parseInt(req.query.offset)) ? req.query.offset : 1,//THIS CANNOT BE 0 (ZERO) MUST BE BETWEEN ! and 101
@@ -67,7 +66,6 @@ exports.search = function(req, res, next){
       //lr: 'lang_en'
    }, function(err, response){
       if (err){
-        console.log('error******');
         console.log(JSON.stringify(err));
         res.send(err);
       }

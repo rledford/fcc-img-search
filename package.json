@@ -10,6 +10,7 @@
   "author": "Ryan Ledford",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "ejs": "latest",
     "express": "latest",
     "google-search": "latest",
