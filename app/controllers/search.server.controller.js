@@ -13,16 +13,10 @@ exports.getSearchHistory = function(req, res){
                res.send(err);
                db.close();
             } else {
-               col.find({}, {'_id': 0}, function(err, cursor){
-                  if (err){
-                     res.send(err);
-                     db.close();
-                  } else {
-                     cursor.toArray(function(err, docs){
-                        res.send(docs);
-                     });
-                     db.close();
-                  }
+               console.log('sorting resutls');
+               col.find({}, {'_id': 0}).sort({'date': -1}).limit(10).toArray(function(err, docs){
+                  console.log(docs);
+                  res.send(docs);
                });
             }
          });
